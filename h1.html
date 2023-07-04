@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Select Indian Language</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .language-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .language-card {
+      flex: 0 0 120px;
+      max-width: 200px;
+      height: auto;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    
+    .language-card:hover {
+      transform: scale(1.05);
+    }
+    
+    .language-image {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+    
+    .language-name {
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      color: #333;
+    }
+    
+    .button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: block;
+      margin: 20px auto;
+    }
+    
+    .button:hover {
+      background-color: #0056b3;
+    }
+    
+    @media (max-width: 480px) {
+      .language-card {
+        flex: 0 0 100px;
+        max-width: 150px;
+      }
+      
+      .language-image {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .language-name {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Select Indian Language</h1>
+  
+  <div class="language-container">
+    <div class="language-card" onclick="selectLanguage('hindi')">
+      <img src="web.jpg" class="language-image" alt="Hindi">
+      <div class="language-name"></div>
+    </div>
+    <div class="language-card" onclick="selectLanguage('english')">
+      <img src="web.jpg" class="language-image" alt="English">
+      <div class="language-name"></div>
+    </div>
+    <div class="language-card" onclick="selectLanguage('telugu')">
+      <img src="web.jpg" class="language-image" alt="Telugu">
+      <div class="language-name"></div>
+    </div>
+    <div class="language-card" onclick="selectLanguage('tamil')">
+      <img src="web.jpg" class="language-image" alt="Tamil">
+      <div class="language-name"></div>
+    </div>
+    <div class="language-card" onclick="selectLanguage('marathi')">
+      <img src="web.jpg" class="language-image" alt="Marathi">
+      <div class="language-name"></div>
+    </div>
+  </div>
+  
+  <button id="shareButton" class="button">Share</button>
+
+
+  <script>
+    let selectedLanguage = '';
+
+    // Function to handle the language selection
+    function selectLanguage(language) {
+      selectedLanguage = language;
+
+      // Remove active class from all language cards
+      const languageCards = document.getElementsByClassName('language-card');
+      for (let i = 0; i < languageCards.length; i++) {
+        languageCards[i].classList.remove('active');
+      }
+
+      // Add active class to the selected language card
+      const selectedLanguageCard = document.querySelector(`[onclick="selectLanguage('${language}')"]`);
+      selectedLanguageCard.classList.add('active');
+    }
+
+     // Function to handle the share button click
+    function shareOnSocialMedia() {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        })
+        .then(() => {
+          console.log('Sharing successful');
+        })
+        .catch((error) => {
+          console.log('Error sharing:', error);
+        });
+      } else {
+        alert('Social sharing not supported on this browser.');
+      }
+    }
+
+    // Attach the click event listener to the share button
+    const shareButton = document.getElementById('shareButton');
+    shareButton.addEventListener('click', shareOnSocialMedia);
+  </script>
+</body>
+</html>
+
+

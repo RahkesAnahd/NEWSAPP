@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Comments</title>
+    <style>
+                ::-webkit-scrollbar {
+width: 0px;
+height: 0px;
+background: transparent; /* make scrollbar transparent */
+}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .comment-section {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            
+        }
+
+        .comment {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+
+        .comment .actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .comment .actions button {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .comment .actions button:focus {
+            outline: none;
+        }
+
+        .comment .actions button:hover {
+            text-decoration: underline;
+        }
+
+        .comment .comment-content {
+            margin-top: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .comment .comment-date {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        .comment .reply-form {
+            margin-top: 10px;
+        }
+
+            .comment-form {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+    }
+
+    .comment-form input[type="text"] {
+      flex-grow: 1;
+      margin-right: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .comment-form button {
+      padding: 8px 16px;
+      background-color: #45a049;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .comment-form button:hover {
+      background-color: #0056b3;
+    }
+
+        .comment.reply {
+            margin-left: 20px;
+        }
+
+        .comment .like-count {
+            font-size: 12px;
+            color: #888;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="comment-section">
+        <h2>Comments</h2>
+        <div id="comments-container"></div>
+        <div class="comment-form">
+            <input type="text" id="comment-input" placeholder="Write a comment...">
+            <button onclick="postComment()">Post Comment</button>
+        </div>
+    </div>
+    
+
+    <script>
+        var commentId = 0;
+
+        function postComment() {
+            var commentInput = document.getElementById('comment-input');
+            var comment = commentInput.value.trim();
+
+            if (comment !== '') {
+                var currentDate = new Date();
+                var commentDate = currentDate.toLocaleString();
+
+                var commentHTML = `
+          <div class="comment" id="comment-${commentId}">
+            <div class="comment-content">
+              <div class="comment-author">User</div>
+              <div class="comment-body">${comment}</div>
+              <div class="comment-date">${commentDate}</div>
+              <div class="actions">
+                <button onclick="toggleLike(${commentId})">
+                  Like<span class="like-count" id="like-count-${commentId}">0</span>
+                </button>
+                <button onclick="toggleReply(${commentId})">Reply</button>
+              </div>
+              <div class="reply-form" id="reply-form-${commentId}" style="display: none;">
+                <textarea id="reply-input-${commentId}" placeholder="Write your reply"></textarea>
+                <br>
+                <button onclick="postReply(${commentId})">Post Reply</button>
+              </div>
+              <div class="replies" id="replies-${commentId}"></div>
+            </div>
+          </div>
+        `;
+
+                var commentsContainer = document.getElementById('comments-container');
+                commentsContainer.innerHTML += commentHTML;
+
+                commentInput.value = '';
+                commentId++;
+            }
+        }
+
+        function toggleLike(commentId) {
+            var comment = document.getElementById('comment-' + commentId);
+            var likeButton = comment.querySelector('.actions button:first-child');
+            var likeCount = comment.querySelector('.like-count');
+
+            likeButton.classList.toggle('liked');
+
+            if (likeButton.classList.contains('liked')) {
+                likeCount.textContent = parseInt(likeCount.textContent) + 1;
+            } else {
+                likeCount.textContent = parseInt(likeCount.textContent) - 1;
+            }
+        }
+
+        function toggleReply(commentId) {
+            var replyForm = document.getElementById('reply-form-' + commentId);
+            replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function postReply(commentId) {
+            var replyInput = document.getElementById('reply-input-' + commentId);
+            var reply = replyInput.value.trim();
+
+            if (reply !== '') {
+                var currentDate = new Date();
+                var replyDate = currentDate.toLocaleString();
+
+                var replyHTML = `
+          <div class="comment reply">
+            <div class="comment-content">
+              <div class="comment-author">User</div>
+              <div class="comment-body">${reply}</div>
+              <div class="comment-date">${replyDate}</div>
+            </div>
+          </div>
+        `;
+
+                var replyForm = document.getElementById('reply-form-' + commentId);
+                var repliesContainer = document.getElementById('replies-' + commentId);
+                repliesContainer.innerHTML += replyHTML;
+
+                replyInput.value = '';
+                toggleReply(commentId);
+            }
+        }
+    </script>
+</body>
+
+</html>
+

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Share Current Page URL</title>
+</head>
+
+<body>
+    <button onclick="shareURL()">Share URL</button>
+
+    <script>
+        function shareURL() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    url: window.location.href
+                })
+                    .then(() => {
+                        console.log('URL shared successfully');
+                    })
+                    .catch((error) => {
+                        console.error('Error sharing URL:', error);
+                    });
+            } else {
+                console.log('Web Share API not supported');
+            }
+        }
+    </script>
+</body>
+
+</html>

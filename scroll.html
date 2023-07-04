@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Meta Tags -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <!-- CSS Files Links -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css"/>
+ 
+  <!-- Title -->
+  <title>TDS</title>
+  <style>
+    .fp-watermark {
+display: none;
+}
+  </style>
+</head>
+<body>
+
+<div id="fullpage">
+    <div class="section" style=" background-color:rgb(162, 76, 151);text-align:center;">
+        <h1>Inital section</h1>
+    </div>
+    <div class="section" style=" background-color:rgb(15, 71, 238);text-align:center;" >
+
+    <div class="slide"><h1>first slide</h1></div>
+    <div class="slide">
+        <h1>second slide</h1>
+    </div>
+    <div class="slide">
+        <h1>third slide</h1>
+    </div>
+    <div class="slide">
+        <h1>fourth slide</h1>
+    </div>
+
+    </div>
+    <div class="section" style=" background-color:green;text-align:center;" ><h1>second section</h1></div>
+    <div class="section" style=" background-color:grey;text-align:center;" ><h1>third section</h1></div>
+    <div class="section" style=" background-color:yellow;text-align:center;" ><h1>fourth section</h1></div>
+</div>
+
+
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"
+></script>
+
+    <script>
+
+        new fullpage('#fullpage', {
+                //options here
+                autoScrolling: true,
+                scrollingSpeed: 800,
+                
+                controlArrows:false,
+                slidesNavigation: true,
+                scrollHorizontally:true,
+            })
+
+            $(document).ready(function () {
+                    $('#fullpage').fullpage({
+                        sectionsColor: ['#1bbc9b', '#4BBFC3'],
+                        loopBottom: true,
+                        afterRender: function () {
+                            setInterval(function () {
+                                fullpage_api.moveSlideRight();
+                            }, 800);
+                        }
+                    });
+                });
+    </script>
+</body>
+</html>

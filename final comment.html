@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>WhatsApp Comments Page</title>
+    <style>
+        /* CSS for WhatsApp Comments Page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background-color: #075e54;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-header img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .chat-header h2 {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .chat-date {
+            background-color: #f2f2f2;
+            color: #888;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .chat-body {
+            flex: 1;
+            background-color: #f2f2f2;
+            padding: 10px;
+            overflow-y: scroll;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+
+        .message .user {
+            font-weight: bold;
+            color: #075e54;
+        }
+
+        .message .timestamp {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .message .content {
+            margin-top: 5px;
+        }
+
+        .message .actions {
+            margin-top: 10px;
+        }
+
+        .message .actions button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #888;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .message .actions button:hover {
+            text-decoration: underline;
+        }
+
+        .message .sub-comments {
+            margin-top: 10px;
+            margin-left: 20px;
+            border-left: 1px solid #ddd;
+            padding-left: 10px;
+        }
+
+        .chat-footer {
+            background-color: #fff;
+            padding: 10px;
+            display: flex;
+        }
+
+        .chat-footer input[type="text"] {
+            flex: 1;
+            border: none;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .chat-footer button {
+            background-color: #075e54;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+
+        .like-count {
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <img src="web.jpg" alt="WhatsApp Logo">
+            <h2>Comments</h2>
+        </div>
+        <div class="chat-date" id="chatDate"></div>
+        <div class="chat-body" id="chatBody">
+            <!-- Existing messages here -->
+            <div class="message">
+                <span class="user">John:</span>
+                <span class="timestamp">10:00 AM</span>
+                <div class="content">Hey, this is a comment!</div>
+                <div class="actions">
+                    <button onclick="replyComment(this)">Reply</button>
+                    <button onclick="likeComment(this)">Like</button>
+                    <span class="like-count">0</span>
+                </div>
+                <div class="sub-comments"></div>
+            </div>
+            <div class="message">
+                <span class="user">Emily:</span>
+                <span class="timestamp">10:05 AM</span>
+                <div class="content">I agree with you, John.</div>
+                <div class="actions">
+                    <button onclick="replyComment(this)">Reply</button>
+                    <button onclick="likeComment(this)">Like</button>
+                    <span class="like-count">0</span>
+                </div>
+                <div class="sub-comments"></div>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="commentInput" placeholder="Type your comment...">
+            <button id="sendButton">Send</button>
+        </div>
+
+        <script>
+            // JavaScript for adding comments
+            document.getElementById("sendButton").addEventListener("click", function () {
+                var commentInput = document.getElementById("commentInput");
+                var comment = commentInput.value;
+                if (comment.trim() !== "") {
+                    var dateContainer = document.getElementById("chatDate");
+                    var currentDate = getCurrentDate();
+                    if (dateContainer.innerHTML !== currentDate) {
+                        dateContainer.innerHTML = currentDate;
+                    }
+                    var messageContainer = document.createElement("div");
+                    messageContainer.classList.add("message");
+                    messageContainer.innerHTML = `
+            <span class="user">You:</span>
+            <span class="timestamp">${getCurrentTime()}</span>
+            <div class="content">${comment}</div>
+            <div class="actions">
+              <button onclick="replyComment(this)">Reply</button>
+              <button onclick="likeComment(this)">Like</button>
+              <span class="like-count">0</span>
+            </div>
+            <div class="sub-comments"></div>
+          `;
+                    document.getElementById("chatBody").appendChild(messageContainer);
+                    commentInput.value = "";
+                    commentInput.focus();
+                }
+            });
+
+            function getCurrentDate() {
+                var date = new Date();
+                var day = date.getDate();
+                var month = date.toLocaleString("default", { month: "long" });
+                var year = date.getFullYear();
+                var currentDate = month + " " + day + ", " + year;
+                return currentDate;
+            }
+
+            function getCurrentTime() {
+                var date = new Date();
+                var hours = date.getHours();
+                var minutes = date.getMinutes();
+                var ampm = hours >= 12 ? "PM" : "AM";
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                var currentTime = hours + ":" + minutes + " " + ampm;
+                return currentTime;
+            }
+
+            function replyComment(button) {
+                var commentInput = document.getElementById("commentInput");
+                var user = button.parentNode.parentNode.querySelector(".user").innerText;
+                commentInput.value = "Replying to " + user + ": ";
+                commentInput.focus();
+            }
+
+            function likeComment(button) {
+                var likeCount = button.parentNode.querySelector(".like-count");
+                var currentLikes = parseInt(likeCount.innerText);
+                if (button.style.color === "rgb(7, 94, 84)") {
+                    button.style.color = "#888";
+                    likeCount.innerText = currentLikes - 1;
+                } else {
+                    button.style.color = "#075e54";
+                    likeCount.innerText = currentLikes + 1;
+                }
+            }
+        </script>
+    </div>
+</body>
+
+</html>
